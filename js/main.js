@@ -40,7 +40,7 @@
   if (sheet) sheet.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeSheet));
 
   /* ----------------------------------------------------------
-     3. Header scroll-shadow (transparent over hero)
+     3. Header scroll-shadow (frosted while at top, solid + shadow on scroll)
   ---------------------------------------------------------- */
   const header = document.getElementById('site-header');
   if (header) {

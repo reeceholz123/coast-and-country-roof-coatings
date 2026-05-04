@@ -170,6 +170,8 @@ section { padding: var(--section-py) 0; }
 
 /* --- Top announce ticker ------------------------------------------ */
 .announce-bar {
+  position: relative;
+  z-index: 1;
   background: var(--ink);
   color: var(--paper);
   border-bottom: 1px solid var(--steel);
@@ -201,13 +203,15 @@ section { padding: var(--section-py) 0; }
 
 /* --- Site header / nav -------------------------------------------- */
 .site-header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 50;
-  background: transparent;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11, 11, 13, 0.92);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   color: var(--paper);
-  transition: background var(--t) var(--ease), box-shadow var(--t) var(--ease), border-color var(--t) var(--ease);
   border-bottom: 1px solid transparent;
+  transition: background var(--t) var(--ease), box-shadow var(--t) var(--ease), border-color var(--t) var(--ease);
 }
 .site-header.is-scrolled {
   background: var(--ink);
@@ -391,7 +395,7 @@ section { padding: var(--section-py) 0; }
   width: 100%;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 130px var(--pad-x) 90px;
+  padding: 120px var(--pad-x) 64px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -479,7 +483,7 @@ section { padding: var(--section-py) 0; }
   }
   .hero .hero-bg { object-position: 50% 60%; }
   .hero-content {
-    padding: 90px 20px 60px;
+    padding: 80px 20px 32px;
     text-align: center;
     gap: 24px;
   }
