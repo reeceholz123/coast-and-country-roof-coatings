@@ -352,9 +352,11 @@ section { padding: var(--section-py) 0; }
   min-height: 720px;
   display: flex;
   overflow: hidden;
-  background: var(--ink);
+  isolation: isolate;
+  background: linear-gradient(180deg, var(--brand-deep) 0%, var(--brand) 100%);
   color: var(--paper);
 }
+/* PLACEHOLDER · ken-burns animation kept for when hero image is supplied later. */
 .hero picture { position: absolute; inset: 0; z-index: 1; }
 .hero .hero-bg {
   position: absolute;
@@ -364,7 +366,6 @@ section { padding: var(--section-py) 0; }
   object-fit: cover;
   object-position: 50% 40%;
   z-index: 1;
-  animation: ken-burns 24s ease-in-out infinite;
   will-change: transform;
 }
 @keyframes ken-burns {
@@ -380,11 +381,9 @@ section { padding: var(--section-py) 0; }
   inset: 0;
   z-index: 2;
   background: linear-gradient(180deg,
-    rgba(6,15,30,.72) 0%,
-    rgba(6,15,30,.30) 25%,
-    rgba(6,15,30,.20) 55%,
-    rgba(6,15,30,.55) 85%,
-    rgba(6,15,30,.85) 100%);
+    rgba(0,0,0,.25) 0%,
+    rgba(0,0,0,.05) 50%,
+    rgba(0,0,0,.30) 100%);
 }
 .hero-content {
   position: relative;
@@ -631,7 +630,7 @@ section { padding: var(--section-py) 0; }
 }
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   align-items: center;
   gap: 0;
 }
@@ -670,11 +669,7 @@ section { padding: var(--section-py) 0; }
   margin-top: 12px;
 }
 @media (max-width: 720px) {
-  .stats-row { grid-template-columns: repeat(2, 1fr); gap: 24px 0; }
-  .stats-item:nth-child(3)::before { display: none; }
-}
-@media (max-width: 480px) {
-  .stats-row { grid-template-columns: 1fr; gap: 24px; }
+  .stats-row { grid-template-columns: 1fr; gap: 28px; }
   .stats-item::before { display: none !important; }
 }
 
@@ -693,7 +688,16 @@ section { padding: var(--section-py) 0; }
   border-radius: var(--radius);
 }
 .ba-slider .pane { position: absolute; inset: 0; overflow: hidden; }
-.ba-slider .pane img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ba-slider .pane img,
+.ba-slider .pane.before img,
+.ba-slider .pane.after img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
 .ba-slider .pane.after { clip-path: inset(0 0 0 50%); transition: clip-path .12s ease-out; }
 .ba-slider .handle {
   position: absolute;
@@ -848,6 +852,13 @@ section { padding: var(--section-py) 0; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
+  display: block;
+}
+.ba-sub {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.92rem;
+  color: rgba(245,242,237,.78);
 }
 .ba-carousel .ba-slider { aspect-ratio: 16 / 9; }
 
