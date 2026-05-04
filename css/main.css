@@ -207,17 +207,14 @@ section { padding: var(--section-py) 0; }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(11, 11, 13, 0.92);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-  color: var(--paper);
-  border-bottom: 1px solid transparent;
+  background: var(--paper);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
   transition: background var(--t) var(--ease), box-shadow var(--t) var(--ease), border-color var(--t) var(--ease);
 }
 .site-header.is-scrolled {
-  background: var(--ink);
-  border-bottom-color: var(--steel);
-  box-shadow: 0 4px 20px rgba(0,0,0,.30);
+  background: var(--paper);
+  box-shadow: 0 4px 20px rgba(0,0,0,.08);
 }
 .nav {
   display: flex;
@@ -232,6 +229,16 @@ section { padding: var(--section-py) 0; }
   .nav { padding: 14px var(--pad-x); }
 }
 .brand { display: inline-flex; align-items: center; }
+.brand-logo {
+  height: 44px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+.footer-brand .brand-logo,
+.site-footer .brand-logo { height: 60px; }
+.mobile-sheet-head .brand-logo { height: 36px; }
+
 .brand-text {
   font-family: var(--font-display);
   font-weight: 700;
@@ -260,8 +267,8 @@ section { padding: var(--section-py) 0; }
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
-.nav-links a { color: var(--paper); transition: color var(--t) var(--ease); }
-.nav-links a:hover { color: var(--accent); }
+.nav-links a { color: var(--ink); transition: color var(--t) var(--ease); }
+.nav-links a:hover { color: var(--brand); }
 
 .nav-cta { display: flex; align-items: center; gap: 16px; }
 .nav-phone {
@@ -272,9 +279,11 @@ section { padding: var(--section-py) 0; }
   font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.05em;
-  color: var(--paper);
+  color: var(--ink);
+  transition: color var(--t) var(--ease);
 }
-.nav-phone svg { width: 18px; height: 18px; color: var(--accent); }
+.nav-phone:hover { color: var(--brand); }
+.nav-phone svg { width: 18px; height: 18px; color: var(--brand); }
 .nav .btn { min-height: 42px; padding: 0 18px; font-size: 0.78rem; }
 
 .nav-burger {
@@ -291,7 +300,7 @@ section { padding: var(--section-py) 0; }
   left: 50%;
   width: 22px;
   height: 2px;
-  background: var(--paper);
+  background: var(--ink);
   transform: translateX(-50%);
   transition: transform .3s var(--ease), top .3s var(--ease);
 }
@@ -2363,5 +2372,93 @@ details.areas-col ul li::before {
     padding: 0 8px;
   }
 }
+
+/* =====================================================================
+   MOBILE REFINEMENT BLOCK · ROUND 3 (≤720px)
+   Logo sizing, paper header, tighter about-stats, 3-across trust badges,
+   "Call Bryce" pill labels (handled in HTML), body padding clearance for
+   sticky CTA, h2 line-height. Overrides previous mobile rounds.
+   ===================================================================== */
+
+/* hide-mobile / hide-desktop helpers used by inline labels — global */
+.hide-desktop { display: none; }
+.hide-mobile  { display: inline; }
+
+@media (max-width: 720px) {
+
+  /* --- Inline label visibility swap ------------------------------ */
+  .hide-desktop { display: inline; }
+  .hide-mobile  { display: none; }
+
+  /* --- 1. Logo sizing on mobile ---------------------------------- */
+  .site-header .brand-logo { height: 30px; }
+  .footer-brand .brand-logo,
+  .site-footer .brand-logo { height: 48px; }
+
+  /* --- 4. About-stats · force one line, very tight --------------- */
+  .about-stats {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: center;
+    align-items: center;
+    gap: 6px !important;
+    padding: 0 4px !important;
+    width: 100%;
+    overflow: visible;
+  }
+  .about-stats > * {
+    flex: 0 1 auto;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0.62rem !important;
+    letter-spacing: 0.05em !important;
+  }
+  .about-stats .about-stat-line strong {
+    font-size: 0.7rem !important;
+  }
+  .about-stats .about-stat-sep {
+    display: inline-block !important;
+    color: var(--accent);
+    font-size: 0.62rem !important;
+    flex: 0 0 auto;
+    padding: 0 !important;
+  }
+
+  /* --- 5. Trust badges · 3 across one row ------------------------ */
+  .trust-badge-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    justify-content: space-around;
+    align-items: center;
+    gap: 8px !important;
+    padding: 20px 8px !important;
+  }
+  .trust-badge {
+    flex: 1 1 33% !important;
+    align-items: center;
+    text-align: center;
+    gap: 2px;
+    min-width: 0;
+  }
+  .trust-badge-mark {
+    font-size: 0.78rem !important;
+    letter-spacing: 0.02em;
+  }
+  .trust-badge-label {
+    font-size: 0.5rem !important;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+  }
+
+  /* --- 9. Section spacing · sticky CTA clearance ----------------- */
+  body { padding-bottom: 72px; }
+  .section-head h2 {
+    line-height: 1.0;
+    padding-bottom: 4px;
+  }
+}
+
 
 
