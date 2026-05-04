@@ -1,59 +1,68 @@
 /* ============================================================
    Coast and Country Roof Coatings — main.js
-   Single IIFE implementing the 21 behaviours from spec §14.
+   Single IIFE. Behaviours wired per the rebuild spec.
    ============================================================ */
 (function () {
   'use strict';
 
-  console.info('Coast and Country · site script v1');
+  console.info('Coast and Country · site script v2');
 
-  /* 1. Hero image resolution warning -------------------------- */
-  const heroImg = document.querySelector('.hero-bg');
-  if (heroImg) {
-    heroImg.addEventListener('load', () => {
-      if (heroImg.naturalWidth < 1600) {
-        console.warn('Coast and Country: hero image <1600px wide — supply a larger source for sharper rendering.');
-      }
-    });
-  }
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* 2. Quote-fields template injection ----------------------- */
+  /* ----------------------------------------------------------
+     1. Quote-fields template injection
+  ---------------------------------------------------------- */
   const tpl = document.getElementById('quote-fields-template');
   if (tpl) {
     document.querySelectorAll('[data-inject-quote-fields]').forEach((form) => {
-      const frag = tpl.content.cloneNode(true);
-      form.appendChild(frag);
+      form.appendChild(tpl.content.cloneNode(true));
     });
   }
 
-  /* 3. Mobile menu open/close -------------------------------- */
+  /* ----------------------------------------------------------
+     2. Mobile menu open/close
+  ---------------------------------------------------------- */
   const sheet = document.getElementById('mobile-sheet');
   const burger = document.querySelector('.nav-burger');
   const sheetClose = sheet && sheet.querySelector('.close');
-  function openSheet() { sheet.classList.add('is-open'); sheet.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-  function closeSheet() { sheet.classList.remove('is-open'); sheet.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+  function openSheet() {
+    sheet.classList.add('is-open');
+    sheet.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSheet() {
+    sheet.classList.remove('is-open');
+    sheet.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
   if (burger && sheet) burger.addEventListener('click', openSheet);
   if (sheetClose) sheetClose.addEventListener('click', closeSheet);
   if (sheet) sheet.querySelectorAll('a').forEach((a) => a.addEventListener('click', closeSheet));
 
-  /* 4. Header scroll-shadow --------------------------------- */
-  const header = document.getElementById('site-header') || document.querySelector('.site-header');
+  /* ----------------------------------------------------------
+     3. Header scroll-shadow (transparent over hero)
+  ---------------------------------------------------------- */
+  const header = document.getElementById('site-header');
   if (header) {
     const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
     document.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   }
 
-  /* 5. Ticker speed normalisation --------------------------- */
+  /* ----------------------------------------------------------
+     4. Ticker speed normalisation (~60 px/s)
+  ---------------------------------------------------------- */
   document.querySelectorAll('[data-ticker-track]').forEach((track) => {
     requestAnimationFrame(() => {
       const w = track.scrollWidth;
-      const seconds = Math.max(30, Math.min(90, w / 80));
+      const seconds = Math.max(30, Math.min(120, w / 60));
       track.style.animationDuration = seconds + 's';
     });
   });
 
-  /* 6. Before/after slider drag ----------------------------- */
+  /* ----------------------------------------------------------
+     5. Before/after slider drag
+  ---------------------------------------------------------- */
   document.querySelectorAll('.ba-slider').forEach((slider) => {
     const after = slider.querySelector('.pane.after');
     const handle = slider.querySelector('.handle');
@@ -85,7 +94,9 @@
     window.addEventListener('touchend', end);
   });
 
-  /* 7. FAQ accordion (single-open) -------------------------- */
+  /* ----------------------------------------------------------
+     6. FAQ accordion (single-open)
+  ---------------------------------------------------------- */
   document.querySelectorAll('.faq-item').forEach((item) => {
     item.addEventListener('toggle', () => {
       if (item.open) {
@@ -96,7 +107,9 @@
     });
   });
 
-  /* 8. Areas accordion (open desktop, closed mobile) -------- */
+  /* ----------------------------------------------------------
+     7. Areas accordion (open desktop, closed mobile)
+  ---------------------------------------------------------- */
   const areas = document.querySelectorAll('details.areas-col');
   function syncAreas() {
     const mobile = window.matchMedia('(max-width: 720px)').matches;
@@ -105,8 +118,66 @@
   syncAreas();
   window.addEventListener('resize', syncAreas);
 
-  /* 9. Scroll reveal + stagger ------------------------------ */
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  /* ----------------------------------------------------------
+     8. Counter tween helper
+  ---------------------------------------------------------- */
+  function tweenCount(el, target, dur, prefix, suffix) {
+    prefix = prefix || '';
+    suffix = suffix || '';
+    const start = performance.now();
+    function step(now) {
+      const t = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = prefix + Math.round(eased * target) + suffix;
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = prefix + target + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ----------------------------------------------------------
+     9. Stats strip counters (on viewport entry)
+  ---------------------------------------------------------- */
+  if ('IntersectionObserver' in window) {
+    const statsIo = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('[data-stat]').forEach((el) => {
+            const target = parseInt(el.dataset.countTo || '0', 10);
+            const prefix = el.dataset.prefix || '';
+            const suffix = el.dataset.suffix || '';
+            tweenCount(el, target, 1200, prefix, suffix);
+          });
+          statsIo.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('[data-stats]').forEach((s) => statsIo.observe(s));
+  }
+
+  /* ----------------------------------------------------------
+     10. Guarantee gauge SVG arc + number tween
+  ---------------------------------------------------------- */
+  const gauge = document.querySelector('.guarantee-gauge');
+  if (gauge && 'IntersectionObserver' in window) {
+    const arc = gauge.querySelector('.gauge-arc');
+    const num = gauge.querySelector('.gauge-num');
+    const target = parseInt(num.dataset.countTo || '10', 10);
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          if (arc) arc.classList.add('is-animating');
+          if (num) tweenCount(num, target, 1400, '', '');
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(gauge);
+  }
+
+  /* ----------------------------------------------------------
+     11. Scroll reveal + stagger
+  ---------------------------------------------------------- */
   if ('IntersectionObserver' in window && !reduced) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e, i) => {
@@ -121,45 +192,16 @@
     document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
   }
 
-  /* 10. Counter tween + 11. Gauge animation ----------------- */
-  function tweenCount(el, target, dur) {
-    const start = performance.now();
-    function step(now) {
-      const t = Math.min(1, (now - start) / dur);
-      const eased = 1 - Math.pow(1 - t, 3);
-      el.textContent = Math.round(eased * target);
-      if (t < 1) requestAnimationFrame(step);
-      else el.textContent = target;
-    }
-    requestAnimationFrame(step);
-  }
-  const gauge = document.querySelector('.guarantee-gauge');
-  if (gauge && 'IntersectionObserver' in window) {
-    const arc = gauge.querySelector('.gauge-arc');
-    const num = gauge.querySelector('.gauge-num');
-    const target = parseInt(num.dataset.countTo || '10', 10);
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (e.isIntersecting) {
-          if (arc) arc.classList.add('is-animating');
-          if (num) tweenCount(num, target, 1600);
-          io.disconnect();
-        }
-      });
-    }, { threshold: 0.4 });
-    io.observe(gauge);
-  }
-
-  /* 12. Gallery constant drift + dot navigation ------------- */
+  /* ----------------------------------------------------------
+     12. Gallery constant drift + dot navigation (RAF loop)
+  ---------------------------------------------------------- */
   const gallery = document.querySelector('[data-gallery]');
   const galleryTrack = document.querySelector('[data-gallery-track]');
   const galleryDotsHost = document.querySelector('[data-gallery-dots]');
   if (gallery && galleryTrack) {
     const tiles = Array.from(galleryTrack.children);
     if (tiles.length) {
-      // Duplicate tiles for seamless loop
       tiles.forEach((t) => galleryTrack.appendChild(t.cloneNode(true)));
-      // Build dots = number of original tiles
       if (galleryDotsHost) {
         tiles.forEach((_, i) => {
           const b = document.createElement('button');
@@ -171,7 +213,7 @@
       }
       let pos = 0;
       let paused = false;
-      const speed = 0.35; // px/frame
+      const speed = 0.35;
       function step() {
         if (!paused) {
           pos -= speed;
@@ -186,7 +228,7 @@
         if (!galleryDotsHost) return;
         const tile = tiles[0];
         if (!tile) return;
-        const tw = tile.getBoundingClientRect().width + 16;
+        const tw = tile.getBoundingClientRect().width + 14;
         const idx = Math.round(Math.abs(pos) / tw) % tiles.length;
         galleryDotsHost.querySelectorAll('.gallery-dot').forEach((d, i) => {
           d.classList.toggle('is-active', i === idx);
@@ -195,7 +237,7 @@
       function jumpTo(idx) {
         const tile = tiles[0];
         if (!tile) return;
-        const tw = tile.getBoundingClientRect().width + 16;
+        const tw = tile.getBoundingClientRect().width + 14;
         pos = -tw * idx;
         galleryTrack.style.transform = `translateX(${pos}px)`;
         updateActiveDot();
@@ -206,7 +248,27 @@
     }
   }
 
-  /* 13. Reviews carousel ----------------------------------- */
+  /* ----------------------------------------------------------
+     13. Before/after carousel (4 slides + dot nav)
+  ---------------------------------------------------------- */
+  const baCarousel = document.querySelector('[data-ba-carousel]');
+  const baTrack = baCarousel && baCarousel.querySelector('[data-ba-track]');
+  if (baCarousel && baTrack) {
+    const items = Array.from(baTrack.children);
+    const dots = Array.from(baCarousel.querySelectorAll('[data-ba-jump]'));
+    let active = 0;
+    function setActive(i) {
+      active = (i + items.length) % items.length;
+      baTrack.style.transform = `translateX(${-active * 100}%)`;
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === active));
+    }
+    dots.forEach((d, di) => d.addEventListener('click', () => setActive(di)));
+    setActive(0);
+  }
+
+  /* ----------------------------------------------------------
+     14. Reviews carousel (scroll-snap + arrows + dots + auto-advance)
+  ---------------------------------------------------------- */
   const reviews = document.querySelector('[data-reviews]');
   const reviewsTrack = document.querySelector('[data-reviews-track]');
   if (reviews && reviewsTrack) {
@@ -215,43 +277,81 @@
     const prev = document.querySelector('[data-reviews-prev]');
     const next = document.querySelector('[data-reviews-next]');
     let active = 0;
-    const isMobile = () => window.matchMedia('(max-width: 960px)').matches;
-    function setActive(i) {
-      active = (i + cards.length) % cards.length;
-      dots.forEach((d, di) => d.classList.toggle('is-active', di === active));
-      if (isMobile()) {
-        cards.forEach((c, ci) => { c.style.display = ci === active ? '' : 'none'; });
-      } else {
-        cards.forEach((c) => { c.style.display = ''; });
-      }
+    let auto = null;
+
+    function cardStep() {
+      const first = cards[0];
+      if (!first) return 0;
+      const styles = getComputedStyle(reviewsTrack);
+      const gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      return first.getBoundingClientRect().width + gap;
     }
-    if (prev) prev.addEventListener('click', () => setActive(active - 1));
-    if (next) next.addEventListener('click', () => setActive(active + 1));
-    dots.forEach((d, di) => d.addEventListener('click', () => setActive(di)));
-    window.addEventListener('resize', () => setActive(active));
-    setActive(0);
+    function syncFromScroll() {
+      const step = cardStep();
+      if (!step) return;
+      const idx = Math.round(reviewsTrack.scrollLeft / step);
+      active = Math.max(0, Math.min(cards.length - 1, idx));
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === active));
+    }
+    function jumpTo(i) {
+      active = (i + cards.length) % cards.length;
+      reviewsTrack.scrollTo({ left: active * cardStep(), behavior: 'smooth' });
+      dots.forEach((d, di) => d.classList.toggle('is-active', di === active));
+    }
+    if (prev) prev.addEventListener('click', () => jumpTo(active - 1));
+    if (next) next.addEventListener('click', () => jumpTo(active + 1));
+    dots.forEach((d, di) => d.addEventListener('click', () => jumpTo(di)));
+
+    let scrollT = null;
+    reviewsTrack.addEventListener('scroll', () => {
+      if (scrollT) clearTimeout(scrollT);
+      scrollT = setTimeout(syncFromScroll, 80);
+    }, { passive: true });
+
+    function startAuto() {
+      stopAuto();
+      auto = setInterval(() => {
+        const step = cardStep();
+        const max = reviewsTrack.scrollWidth - reviewsTrack.clientWidth;
+        if (reviewsTrack.scrollLeft >= max - 4) jumpTo(0);
+        else jumpTo(active + 1);
+      }, 5000);
+    }
+    function stopAuto() { if (auto) { clearInterval(auto); auto = null; } }
+    reviews.addEventListener('mouseenter', stopAuto);
+    reviews.addEventListener('mouseleave', startAuto);
+    if (!reduced) startAuto();
+    window.addEventListener('resize', syncFromScroll);
   }
 
-  /* 14. Colour guide expand/collapse ----------------------- */
+  /* ----------------------------------------------------------
+     15. Colour guide expand/collapse (height + opacity)
+  ---------------------------------------------------------- */
   const cToggle = document.querySelector('[data-colour-toggle]');
   const cExtra  = document.querySelector('[data-colour-extra]');
   const cLabel  = document.querySelector('[data-toggle-label]');
   if (cToggle && cExtra) {
     cToggle.addEventListener('click', () => {
-      const open = cExtra.hasAttribute('hidden') ? false : true;
-      if (open) {
-        cExtra.setAttribute('hidden', '');
+      const isOpen = cExtra.classList.contains('is-open');
+      if (isOpen) {
+        cExtra.classList.remove('is-open');
         cToggle.setAttribute('aria-expanded', 'false');
         if (cLabel) cLabel.textContent = 'View All 22 Colours';
+        setTimeout(() => { cExtra.setAttribute('hidden', ''); }, 350);
       } else {
         cExtra.removeAttribute('hidden');
+        // Force reflow before applying transition
+        void cExtra.offsetWidth;
+        cExtra.classList.add('is-open');
         cToggle.setAttribute('aria-expanded', 'true');
         if (cLabel) cLabel.textContent = 'Show Fewer';
       }
     });
   }
 
-  /* 15. Smooth scroll for anchors -------------------------- */
+  /* ----------------------------------------------------------
+     16. Smooth scroll for anchor links
+  ---------------------------------------------------------- */
   document.querySelectorAll('a[href^="#"]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const id = a.getAttribute('href');
@@ -262,7 +362,9 @@
     });
   });
 
-  /* 16. File dropzone -------------------------------------- */
+  /* ----------------------------------------------------------
+     17. File dropzone (drag/drop + previews + validation)
+  ---------------------------------------------------------- */
   document.querySelectorAll('[data-dropzone]').forEach((zone) => {
     const input = zone.querySelector('[data-file-input]');
     const previews = zone.parentElement.querySelector('[data-dropzone-previews]');
@@ -280,7 +382,7 @@
         const url = URL.createObjectURL(file);
         const div = document.createElement('div');
         div.className = 'dropzone-thumb';
-        div.innerHTML = `<img src="${url}" alt=""><button type="button" aria-label="Remove">×</button>`;
+        div.innerHTML = `<img src="${url}" alt=""><button type="button" aria-label="Remove">&times;</button>`;
         div.querySelector('button').addEventListener('click', (e) => {
           e.preventDefault();
           div.remove();
@@ -300,25 +402,36 @@
     });
   });
 
-  /* 17. Year auto-update ----------------------------------- */
+  /* ----------------------------------------------------------
+     18. Year auto-update in footer
+  ---------------------------------------------------------- */
   const y = document.getElementById('current-year');
   if (y) y.textContent = String(new Date().getFullYear());
 
-  /* 18. Video autoplay + fallback poster ------------------- */
+  /* ----------------------------------------------------------
+     19. Video error fallback (swap to poster image)
+  ---------------------------------------------------------- */
   document.querySelectorAll('video.media-video').forEach((v) => {
-    v.addEventListener('error', () => {
+    function fallback() {
       const poster = v.getAttribute('poster');
-      if (poster) {
-        const img = document.createElement('img');
-        img.src = poster;
-        img.alt = '';
-        img.className = 'media-video';
-        v.replaceWith(img);
-      }
-    });
+      if (!poster) return;
+      const img = document.createElement('img');
+      img.src = poster;
+      img.alt = '';
+      img.className = 'media-video';
+      v.replaceWith(img);
+    }
+    v.addEventListener('error', fallback, true);
+    v.querySelectorAll('source').forEach((s) => s.addEventListener('error', fallback));
+    // After a short delay, if no readyState, swap to poster
+    setTimeout(() => {
+      if (v.isConnected && v.readyState === 0 && v.networkState === 3) fallback();
+    }, 2500);
   });
 
-  /* 19. Image fallback ------------------------------------- */
+  /* ----------------------------------------------------------
+     20. Image error fallback (placeholder stripes)
+  ---------------------------------------------------------- */
   document.querySelectorAll('img').forEach((img) => {
     img.addEventListener('error', () => {
       if (img.dataset.fallbackApplied) return;
@@ -331,17 +444,19 @@
     });
   });
 
-  /* 20. Quote modal ---------------------------------------- */
+  /* ----------------------------------------------------------
+     21. Quote modal (with data-service / data-colour pre-fill)
+  ---------------------------------------------------------- */
   const modal = document.getElementById('quote-modal');
-  function openModal(colour) {
+  function openModal(opts) {
     if (!modal) return;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    if (colour) {
-      const inp = modal.querySelector('[data-modal-colour]');
-      if (inp) inp.value = colour;
-    }
+    const colourField  = modal.querySelector('[data-modal-colour]');
+    const serviceField = modal.querySelector('[data-modal-service]');
+    if (colourField)  colourField.value  = (opts && opts.colour)  || '';
+    if (serviceField) serviceField.value = (opts && opts.service) || '';
   }
   function closeModal() {
     if (!modal) return;
@@ -352,14 +467,18 @@
   document.querySelectorAll('[data-open-quote]').forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      const colour = btn.dataset.colour || '';
-      openModal(colour);
+      openModal({
+        colour:  btn.dataset.colour  || '',
+        service: btn.dataset.service || ''
+      });
     });
   });
   document.querySelectorAll('[data-close-modal]').forEach((btn) => btn.addEventListener('click', closeModal));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closeLead(); } });
 
-  /* 21. Lead-capture popup --------------------------------- */
+  /* ----------------------------------------------------------
+     22. Lead-capture popup (15s + exit-intent + 55% scroll)
+  ---------------------------------------------------------- */
   const lead = document.getElementById('lead-popup');
   let leadShown = false;
   function openLead() {
@@ -383,6 +502,37 @@
       if (max > 0 && window.scrollY / max > 0.55) openLead();
     }, { passive: true });
     lead.querySelectorAll('[data-lead-close]').forEach((b) => b.addEventListener('click', closeLead));
+  }
+
+  /* ----------------------------------------------------------
+     23. Hero cursor parallax (desktop only, subtle)
+  ---------------------------------------------------------- */
+  const heroContent = document.querySelector('[data-hero-content]');
+  if (heroContent && !reduced && window.matchMedia('(min-width: 960px)').matches) {
+    const hero = document.querySelector('[data-hero]');
+    if (hero) {
+      hero.addEventListener('mousemove', (e) => {
+        const r = hero.getBoundingClientRect();
+        const cx = (e.clientX - r.left) / r.width - 0.5;
+        const cy = (e.clientY - r.top) / r.height - 0.5;
+        heroContent.style.transform = `translate3d(${(-cx * 4).toFixed(2)}px, ${(-cy * 4).toFixed(2)}px, 0)`;
+      });
+      hero.addEventListener('mouseleave', () => {
+        heroContent.style.transform = '';
+      });
+    }
+  }
+
+  /* ----------------------------------------------------------
+     24. Hero image resolution warning (dev hint)
+  ---------------------------------------------------------- */
+  const heroImg = document.querySelector('.hero-bg');
+  if (heroImg) {
+    heroImg.addEventListener('load', () => {
+      if (heroImg.naturalWidth < 1600) {
+        console.warn('Coast and Country: hero image <1600px wide — supply a larger source for sharper rendering.');
+      }
+    });
   }
 
 })();
