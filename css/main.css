@@ -619,11 +619,125 @@ section { padding: var(--section-py) 0; }
   padding-top: 32px;
   border-top: 1px solid var(--line);
 }
+
+/* --- Why Choose Us tiles (reuses .service-card; 4-col grid) -------- */
+#why .services-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+@media (max-width: 960px) { #why .services-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { #why .services-grid { grid-template-columns: 1fr; } }
+.why-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 2.5rem;
+  line-height: 1;
+  color: var(--brand);
+  letter-spacing: 0.01em;
+  margin-bottom: 12px;
+}
 .services-also {
   font-size: 1rem;
   color: var(--concrete);
   max-width: 720px;
   margin: 0 auto 20px;
+}
+
+/* --- Roof Issues We Fix ------------------------------------------- */
+.issues-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+@media (max-width: 960px) { .issues-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.issue-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.issue-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-card-hover);
+}
+.issue-card .issue-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--accent);
+}
+.issue-card h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.issue-card p {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--concrete);
+  line-height: 1.5;
+}
+
+.issues-cta {
+  text-align: center;
+  margin-top: 36px;
+}
+.issues-cta-lead {
+  font-size: 1rem;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+/* --- Trust badge row ---------------------------------------------- */
+.trust-badge-section { padding: 0; }
+.trust-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px var(--pad-x);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.trust-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.85;
+  transition: opacity var(--t) var(--ease);
+}
+.trust-badge:hover { opacity: 1; }
+.trust-badge-mark {
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+  color: var(--brand);
+  text-transform: uppercase;
+}
+.trust-badge-label {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--concrete);
+}
+@media (max-width: 720px) {
+  .trust-badge-row { gap: 32px; padding: 24px var(--pad-x); }
+  .trust-badge-mark { font-size: 1.1rem; }
 }
 
 /* --- Stats strip --------------------------------------------------- */
