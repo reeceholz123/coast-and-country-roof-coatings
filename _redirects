@@ -1,0 +1,22 @@
+# Netlify _redirects · Coast and Country Roof Coatings
+# Maps legacy WordPress / PHP URLs from the old Innov Studio build to the
+# equivalent sections on the new site. All return 301 (permanent redirect)
+# so Google transfers ranking signal cleanly.
+
+/news/                                                     /                301
+/specials/                                                 /                301
+/testimonials/                                             /#reviews        301
+/dulux-accredited-painter-roof-restoration-hunter-valley/  /#about          301
+/roof-and-driveway-restoration-package-newcastle/          /#services       301
+/winter-roofing-restoration-special/                       /                301
+/roof-restoration-dulux-acratex-roofing-system-info/       /#about          301
+
+# Legacy PHP page slugs
+/index.php                                                 /                301
+/about.php                                                 /#about          301
+/services.php                                              /#services       301
+/gallery.php                                               /#work           301
+/cpage.php                                                 /#quote          301
+/contact.php                                               /#quote          301
+/faqs.php                                                  /#faq            301
+/quote.php                                                 /#quote          301
