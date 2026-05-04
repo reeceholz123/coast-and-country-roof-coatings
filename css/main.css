@@ -13,6 +13,7 @@ body {
   line-height: 1.6;
   color: var(--ink);
   background: var(--paper);
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -494,7 +495,14 @@ section { padding: var(--section-py) 0; }
   .hero-sub-desktop { display: none; }
   .hero-ctas { flex-direction: column; align-items: stretch; }
   .hero-ctas .btn { width: 100%; max-width: 320px; margin: 0 auto; min-height: 48px; }
-  .hero-trust { display: none; }
+  .hero-trust {
+    margin-top: 20px;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    line-height: 1.6;
+  }
+  .hero-trust span { padding: 0 8px; }
+  .hero-trust .sep { padding: 0 4px; }
   .hero-chevron { display: none; }
 }
 
@@ -531,7 +539,7 @@ section { padding: var(--section-py) 0; }
   gap: 14px;
 }
 @media (max-width: 960px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) { .services-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .services-grid { grid-template-columns: 1fr; gap: 20px; } }
 
 .service-card {
   position: relative;
@@ -626,14 +634,14 @@ section { padding: var(--section-py) 0; }
 }
 @media (max-width: 960px) { #why .services-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px) { #why .services-grid { grid-template-columns: 1fr; } }
-.why-num {
-  font-family: var(--font-display);
+.reason-num {
+  display: block;
+  font-family: 'Big Shoulders Display', sans-serif;
   font-weight: 800;
   font-size: 2.5rem;
   line-height: 1;
   color: var(--brand);
-  letter-spacing: 0.01em;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 .services-also {
   font-size: 1rem;
@@ -642,35 +650,41 @@ section { padding: var(--section-py) 0; }
   margin: 0 auto 20px;
 }
 
-/* --- Roof Issues We Fix ------------------------------------------- */
-.issues-grid {
+/* --- Common Roof Problems (3-col grid, 6 tiles) ------------------- */
+.problems-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 14px;
 }
-@media (max-width: 960px) { .issues-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 960px) { .problems-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) {
+  .problems-grid { grid-template-columns: 1fr; gap: 16px; }
+  .problem-card { align-items: center; text-align: center; }
+}
 
-.issue-card {
+.problem-card {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 24px 20px;
+  padding: 28px 22px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0;
   transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
 }
-.issue-card:hover {
+.problem-card:hover {
   transform: translateY(-3px);
   border-color: var(--accent);
   box-shadow: var(--shadow-card-hover);
 }
-.issue-card .issue-icon {
+.problem-card .problem-icon {
   width: 32px;
   height: 32px;
   color: var(--accent);
+  transition: transform .3s var(--ease);
 }
-.issue-card h3 {
+.problem-card:hover .problem-icon { transform: scale(1.08); }
+.problem-card h3 {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.1rem;
@@ -678,19 +692,21 @@ section { padding: var(--section-py) 0; }
   text-transform: uppercase;
   color: var(--ink);
   line-height: 1.1;
+  margin-top: 16px;
 }
-.issue-card p {
+.problem-card p {
   font-family: var(--font-body);
   font-size: 0.92rem;
   color: var(--concrete);
   line-height: 1.5;
+  margin-top: 10px;
 }
 
-.issues-cta {
+.problems-cta {
   text-align: center;
   margin-top: 36px;
 }
-.issues-cta-lead {
+.problems-cta-lead {
   font-size: 1rem;
   color: var(--ink);
   margin-bottom: 14px;
@@ -987,10 +1003,17 @@ section { padding: var(--section-py) 0; }
   margin-top: 28px;
 }
 .ba-dot {
+  position: relative;
   width: 9px; height: 9px;
   border-radius: 50%;
   background: rgba(245,242,237,.25);
   transition: background var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.ba-dot::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
 }
 .ba-dot.is-active { background: var(--accent); transform: scale(1.3); }
 
@@ -1045,10 +1068,17 @@ section { padding: var(--section-py) 0; }
   margin-top: 24px;
 }
 .gallery-dot {
+  position: relative;
   width: 8px; height: 8px;
   border-radius: 50%;
   background: rgba(245,242,237,.20);
   transition: background var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.gallery-dot::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
 }
 .gallery-dot.is-active { background: var(--accent); transform: scale(1.3); }
 
@@ -1166,6 +1196,10 @@ section { padding: var(--section-py) 0; }
   height: 240px;
   margin: 0 auto;
 }
+@media (max-width: 720px) {
+  .guarantee-gauge { width: 180px; height: 180px; }
+  .gauge-num { font-size: 3rem; }
+}
 .gauge-svg { width: 100%; height: 100%; }
 .gauge-track { stroke: var(--line); }
 .gauge-arc { stroke: var(--accent); stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.4s var(--ease); }
@@ -1232,6 +1266,14 @@ section { padding: var(--section-py) 0; }
 @media (max-width: 960px) {
   .reviews-track { grid-auto-columns: 100%; gap: 16px; }
 }
+@media (max-width: 720px) {
+  .reviews-track {
+    grid-auto-columns: 88%;
+    gap: 12px;
+    padding-left: 0;
+    scroll-padding-left: 0;
+  }
+}
 .review-card {
   background: #fff;
   border: 1px solid var(--line);
@@ -1282,10 +1324,17 @@ section { padding: var(--section-py) 0; }
   margin-top: 28px;
 }
 .review-dot {
+  position: relative;
   width: 9px; height: 9px;
   border-radius: 50%;
   background: var(--line);
   transition: background var(--t) var(--ease), transform var(--t) var(--ease);
+}
+.review-dot::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
 }
 .review-dot.is-active { background: var(--accent); transform: scale(1.3); }
 
