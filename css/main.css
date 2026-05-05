@@ -551,9 +551,12 @@ section { padding: var(--section-py) 0; }
     padding: 56px 20px 40px;   /* room above text */
   }
 
-  /* Show the truck and a small strip of road below — less sky, less road */
+  /* Image renders natively — no crop, no scale. The pre-cropped
+     hero_image_mobile.PNG provides its own framing. */
   .hero-bg {
-    object-position: center 80%;
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   /* Strong top-half gradient so the eyebrow + headline + sub
@@ -853,12 +856,15 @@ section { padding: var(--section-py) 0; }
 
 /* --- Trust section (Accredited By) -------------------------------- */
 .trust-section {
-  padding-top: 36px !important;
-  padding-bottom: 36px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
 }
 .trust-header {
   text-align: center;
   margin-bottom: 32px;
+}
+.trust-section .trust-header {
+  margin-bottom: 14px;
 }
 .trust-badge-row {
   display: flex;
@@ -915,8 +921,8 @@ section { padding: var(--section-py) 0; }
 }
 @media (max-width: 720px) {
   .trust-section {
-    padding-top: 24px !important;
-    padding-bottom: 24px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
   }
   .trust-header { margin-bottom: 20px; }
   .trust-badge-row {
@@ -992,48 +998,64 @@ section { padding: var(--section-py) 0; }
 
 /* --- Featured Job · before/after slider --------------------------- */
 .featured-job .ba-slider { margin-top: 24px; }
+
 .ba-slider {
   position: relative;
-  aspect-ratio: 16 / 9;
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  cursor: ew-resize;
+  border-radius: var(--radius);
   background: var(--ink);
   user-select: none;
   touch-action: none;
-  border-radius: var(--radius);
+  cursor: ew-resize;
 }
+
 .ba-slider .pane {
   position: absolute !important;
-  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
   width: 100% !important;
   height: 100% !important;
   overflow: hidden;
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
-.ba-slider .pane img,
-.ba-slider .pane.before img,
-.ba-slider .pane.after img {
+
+.ba-slider .pane img {
   position: absolute !important;
-  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   object-position: center center !important;
-  display: block;
-  margin: 0;
-  padding: 0;
-  border: 0;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
 }
-.ba-slider .pane.before { z-index: 1; }
-.ba-slider .pane.after  { z-index: 2; clip-path: inset(0 0 0 50%); transition: clip-path .12s ease-out; }
 
-/* Per-image crop tuning so before/after align visually */
-.ba-slider .pane.before img[src*="red_roof_before"] { object-position: 50% 60% !important; }
-.ba-slider .pane.after  img[src*="red_roof_after"]  { object-position: 50% 50% !important; }
+.ba-slider .pane.before { z-index: 1; }
+.ba-slider .pane.after  { z-index: 2; clip-path: inset(0 0 0 50%); }
+
+/* Force matching object-position so the rooflines visually align
+   between the two images. Anchor both at the bottom-center where
+   the roofline is most consistent across the two camera angles. */
+.ba-slider .pane.before img,
+.ba-slider .pane.after img {
+  object-position: 50% 65% !important;
+}
+
+@media (max-width: 720px) {
+  .ba-slider { aspect-ratio: 4 / 3; }
+}
 
 /* Drag handle (vertical line) and grip (round centre puck) */
 .ba-slider .handle,
@@ -1189,7 +1211,7 @@ section { padding: var(--section-py) 0; }
   font-size: 0.92rem;
   color: rgba(245,242,237,.78);
 }
-.ba-carousel .ba-slider { aspect-ratio: 16 / 9; }
+/* .ba-carousel .ba-slider inherits 16/9 from base .ba-slider rule above. */
 
 .ba-dots {
   display: flex;
@@ -2574,16 +2596,6 @@ details.areas-col ul li::before {
   }
 }
 
-/* =====================================================================
-   B/A SLIDER MOBILE ASPECT-RATIO OVERRIDE (≤720px)
-   Drops both the Featured Job and the More Work carousel sliders
-   to 4/3 on phones so the photos stay readable. Sits last so it
-   overrides the .ba-carousel .ba-slider { aspect-ratio: 16/9 } rule.
-   ===================================================================== */
-@media (max-width: 720px) {
-  .ba-slider,
-  .ba-carousel .ba-slider {
-    aspect-ratio: 4 / 3;
-  }
-}
+/* (B/A slider mobile 4/3 aspect-ratio now lives with the base
+    .ba-slider block — see top of file.) */
 

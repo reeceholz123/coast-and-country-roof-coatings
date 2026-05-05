@@ -61,38 +61,60 @@
   });
 
   /* ----------------------------------------------------------
-     5. Before/after slider drag
+     5. Before/after slider drag — clip-path with cached rect
   ---------------------------------------------------------- */
-  document.querySelectorAll('.ba-slider').forEach((slider) => {
-    const after = slider.querySelector('.pane.after');
-    const handle = slider.querySelector('.handle');
-    let dragging = false;
-    function setPos(clientX) {
-      const r = slider.getBoundingClientRect();
-      const x = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
-      const pct = (x * 100).toFixed(2);
-      if (after) after.style.clipPath = `inset(0 0 0 ${pct}%)`;
-      if (handle) handle.style.left = pct + '%';
-    }
-    const start = (e) => {
-      dragging = true;
-      const cx = e.touches ? e.touches[0].clientX : e.clientX;
-      setPos(cx);
-      e.preventDefault();
-    };
-    const move = (e) => {
-      if (!dragging) return;
-      const cx = e.touches ? e.touches[0].clientX : e.clientX;
-      setPos(cx);
-    };
-    const end = () => { dragging = false; };
-    slider.addEventListener('mousedown', start);
-    slider.addEventListener('touchstart', start, { passive: false });
-    window.addEventListener('mousemove', move);
-    window.addEventListener('touchmove', move, { passive: true });
-    window.addEventListener('mouseup', end);
-    window.addEventListener('touchend', end);
-  });
+  (function initBASlider() {
+    const sliders = document.querySelectorAll('.ba-slider');
+    if (!sliders.length) return;
+
+    sliders.forEach(slider => {
+      const after = slider.querySelector('.pane.after');
+      const handle = slider.querySelector('.ba-handle, .handle');
+      if (!after || !handle) return;
+
+      let dragging = false;
+      let rect = null;
+
+      function setPos(clientX) {
+        if (!rect) rect = slider.getBoundingClientRect();
+        let pct = ((clientX - rect.left) / rect.width) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+        after.style.clipPath = `inset(0 0 0 ${pct}%)`;
+        handle.style.left = pct + '%';
+      }
+
+      function onMove(e) {
+        if (!dragging) return;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        setPos(clientX);
+        e.preventDefault();
+      }
+
+      function onDown(e) {
+        dragging = true;
+        rect = slider.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        setPos(clientX);
+      }
+
+      function onUp() {
+        dragging = false;
+        rect = null;
+      }
+
+      // Initialize at 50%
+      after.style.clipPath = 'inset(0 0 0 50%)';
+      handle.style.left = '50%';
+
+      slider.addEventListener('mousedown', onDown);
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+
+      slider.addEventListener('touchstart', onDown, { passive: false });
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onUp);
+    });
+  })();
 
   /* ----------------------------------------------------------
      6. FAQ accordion (single-open)
