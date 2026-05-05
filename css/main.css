@@ -846,48 +846,73 @@ section { padding: var(--section-py) 0; }
   border-radius: var(--radius);
 }
 .ba-slider .pane {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 .ba-slider .pane img,
 .ba-slider .pane.before img,
 .ba-slider .pane.after img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center center !important;
   display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 .ba-slider .pane.before { z-index: 1; }
 .ba-slider .pane.after  { z-index: 2; clip-path: inset(0 0 0 50%); transition: clip-path .12s ease-out; }
-.ba-slider .handle {
+
+/* Per-image crop tuning so before/after align visually */
+.ba-slider .pane.before img[src*="red_roof_before"] { object-position: 50% 60% !important; }
+.ba-slider .pane.after  img[src*="red_roof_after"]  { object-position: 50% 50% !important; }
+
+/* Drag handle (vertical line) and grip (round centre puck) */
+.ba-slider .handle,
+.ba-slider .ba-handle {
   position: absolute;
-  top: 0; bottom: 0;
+  top: 0;
+  bottom: 0;
   left: 50%;
-  width: 4px;
-  background: #fff;
+  width: 2px;
+  background: var(--white);
   transform: translateX(-50%);
+  cursor: ew-resize;
+  z-index: 10;
   pointer-events: none;
   box-shadow: 0 0 12px rgba(0,0,0,.4);
 }
 .ba-slider .handle-grip {
   position: absolute;
-  top: 50%; left: 50%;
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%);
-  width: 56px; height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: var(--shadow-md);
+  background: var(--white);
+  color: var(--brand);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  pointer-events: auto;
+  cursor: ew-resize;
 }
-.ba-slider .handle-grip svg { width: 18px; height: 18px; color: var(--brand); }
+.ba-slider .handle-grip svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--brand);
+}
 .ba-label {
   position: absolute;
   top: 16px;
