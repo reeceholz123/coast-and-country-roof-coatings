@@ -576,11 +576,12 @@ section { padding: var(--section-py) 0; }
 /* ===== MOBILE HERO (≤720px) — text in UPPER PORTION ===== */
 @media (max-width: 720px) {
   .hero {
-    min-height: 0 !important;
+    min-height: 0;
+    height: auto;
     display: flex;
     align-items: flex-start;   /* TOP-anchored, not centered */
     justify-content: center;
-    padding: 56px 20px 0 !important;   /* zero bottom — image sets section height */
+    padding: 56px 20px 0;      /* image sets bottom edge */
   }
 
   /* Image renders natively — no crop, no scale. The pre-cropped
@@ -1066,6 +1067,52 @@ section { padding: var(--section-py) 0; }
 
 .ba-slider .pane.before { z-index: 1; }
 .ba-slider .pane.after  { z-index: 2; clip-path: inset(0 0 0 50%); }
+
+/* PLACEHOLDER · diagonal stripe panels until Bryce supplies the
+   real Featured Job before/after photos. */
+.ba-slider .ph-fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--graphite);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ba-slider .ph-fill::after {
+  content: attr(data-ph-label);
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--concrete);
+  background: var(--ink);
+  padding: 8px 16px;
+  border: 1px solid var(--steel);
+  border-radius: var(--radius);
+}
+/* Different stripe direction per pane so the two halves are
+   visually distinct when sliding */
+.ba-slider .pane.before .ph-fill {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--graphite) 0,
+    var(--graphite) 12px,
+    var(--steel) 12px,
+    var(--steel) 24px
+  );
+}
+.ba-slider .pane.after .ph-fill {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--graphite) 0,
+    var(--graphite) 12px,
+    var(--steel) 12px,
+    var(--steel) 24px
+  );
+}
 
 @media (max-width: 720px) {
   .ba-slider { aspect-ratio: 4 / 3; }
