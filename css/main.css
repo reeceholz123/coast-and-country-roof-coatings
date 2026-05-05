@@ -469,25 +469,8 @@ section { padding: var(--section-py) 0; }
   color: rgba(245, 242, 237, 0.5);
 }
 
-/* Scroll-down chevron — desktop scroll affordance, hidden on mobile below */
-.hero-chevron {
-  position: absolute;
-  bottom: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 4;
-  width: 36px;
-  height: 36px;
-  color: var(--paper);
-  opacity: 0.7;
-  animation: hero-bounce 2s ease-in-out infinite;
-}
-.hero-chevron svg { width: 100%; height: 100%; }
-@keyframes hero-bounce {
-  0%, 100% { transform: translate(-50%, 0); }
-  50%      { transform: translate(-50%, 8px); }
-}
-@media (prefers-reduced-motion: reduce) { .hero-chevron { animation: none; } }
+/* Hero bottom bar — desktop only (CTAs left/right of centered scroll arrow) */
+.hero-bottom-bar { display: none; }
 
 /* ===== DESKTOP HERO (≥721px) — text TOP-anchored, sits above the roof ===== */
 @media (min-width: 721px) {
@@ -530,8 +513,9 @@ section { padding: var(--section-py) 0; }
   }
 
   .hero-headline {
-    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-size: clamp(3.6rem, 6.5vw, 5.4rem);
     line-height: 0.95;
+    max-width: 880px;
   }
 
   .hero-sub {
@@ -539,16 +523,64 @@ section { padding: var(--section-py) 0; }
     line-height: 1.5;
     max-width: 580px;
   }
+
+  /* Trust strip hidden on desktop — replaced by bottom bar with CTAs */
+  .hero-trust { display: none !important; }
+
+  /* Original .hero-ctas hidden on desktop — CTAs live in the bottom bar */
+  .hero-content .hero-ctas { display: none; }
+
+  /* Bottom bar: GET A FREE QUOTE | scroll arrow | CALL US */
+  .hero-bottom-bar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 32px;
+    position: absolute;
+    bottom: 32px;
+    left: 0;
+    right: 0;
+    padding: 0 48px;
+    z-index: 3;
+  }
+  .hero-bottom-bar .hero-cta-left  { justify-self: end; }
+  .hero-bottom-bar .hero-cta-right { justify-self: start; }
+
+  .hero-scroll-arrow {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+    transition: background 200ms ease, transform 200ms ease;
+    animation: hero-arrow-bounce 2s ease-in-out infinite;
+  }
+  .hero-scroll-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+  }
+  .hero-scroll-arrow svg {
+    width: 22px;
+    height: 22px;
+  }
+  @keyframes hero-arrow-bounce {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
 }
 
 /* ===== MOBILE HERO (≤720px) — text in UPPER PORTION ===== */
 @media (max-width: 720px) {
   .hero {
-    min-height: 640px;
+    min-height: 0 !important;
     display: flex;
     align-items: flex-start;   /* TOP-anchored, not centered */
     justify-content: center;
-    padding: 56px 20px 40px;   /* room above text */
+    padding: 56px 20px 0 !important;   /* zero bottom — image sets section height */
   }
 
   /* Image renders natively — no crop, no scale. The pre-cropped
@@ -613,8 +645,8 @@ section { padding: var(--section-py) 0; }
   /* Hide trust strip on mobile to keep hero clean */
   .hero-trust { display: none !important; }
 
-  /* Chevron hidden on mobile — viewport is short, scroll affordance not needed */
-  .hero-chevron { display: none; }
+  /* Hide bottom-bar on mobile — sticky bottom CTA handles call/quote */
+  .hero-bottom-bar { display: none; }
 }
 
 /* --- Services ticker (under hero) --------------------------------- */
@@ -864,7 +896,7 @@ section { padding: var(--section-py) 0; }
   margin-bottom: 32px;
 }
 .trust-section .trust-header {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .trust-badge-row {
   display: flex;
@@ -921,9 +953,10 @@ section { padding: var(--section-py) 0; }
 }
 @media (max-width: 720px) {
   .trust-section {
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
   }
+  .trust-section .trust-header { margin-bottom: 8px; }
   .trust-header { margin-bottom: 20px; }
   .trust-badge-row {
     gap: 20px 12px;
@@ -1004,7 +1037,7 @@ section { padding: var(--section-py) 0; }
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 1092 / 588;   /* matches actual cropped image dims */
   overflow: hidden;
   border-radius: var(--radius);
   background: var(--ink);
@@ -1014,44 +1047,25 @@ section { padding: var(--section-py) 0; }
 }
 
 .ba-slider .pane {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
-  margin: 0 !important;
-  padding: 0 !important;
 }
 
 .ba-slider .pane img {
-  position: absolute !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center center !important;
-  display: block !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  max-width: none !important;
-  max-height: none !important;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
 }
 
 .ba-slider .pane.before { z-index: 1; }
 .ba-slider .pane.after  { z-index: 2; clip-path: inset(0 0 0 50%); }
-
-/* Force matching object-position so the rooflines visually align
-   between the two images. Anchor both at the bottom-center where
-   the roofline is most consistent across the two camera angles. */
-.ba-slider .pane.before img,
-.ba-slider .pane.after img {
-  object-position: 50% 65% !important;
-}
 
 @media (max-width: 720px) {
   .ba-slider { aspect-ratio: 4 / 3; }
