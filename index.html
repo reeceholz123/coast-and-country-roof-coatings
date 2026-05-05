@@ -182,7 +182,7 @@
       <h1 class="hero-headline">COAST TO COUNTRY.<br>ROOFS DONE RIGHT.</h1>
     </div>
     <div class="hero-bottom">
-      <p class="hero-sub hero-sub-mobile">Roof restoration across NSW. Dulux Accredited. No deposit.</p>
+      <p class="hero-sub hero-sub-mobile">Coast and Country Roof Coatings. A roof restoration crew led by Bryce with over thirty years in the trade. Now taking bookings across New South Wales. Dulux Accredited. Ten year written guarantee. No deposit.</p>
       <p class="hero-sub hero-sub-desktop">Coast and Country Roof Coatings. A roof restoration crew led by Bryce, with over thirty years in the trade. Now taking bookings across New South Wales. Dulux AcraTex Accredited. Ten year written guarantee. No deposit.</p>
       <div class="hero-ctas">
         <button type="button" class="btn btn-primary" data-open-quote>Get a Free Quote</button>
@@ -541,7 +541,14 @@
       <div class="gallery-tile"><img src="images/big_grey_before.jpeg" alt="Long single storey home before grey respray" loading="lazy"></div>
     </div>
   </div>
-  <div class="gallery-dots" role="tablist" aria-label="Gallery navigation" data-gallery-dots></div>
+  <div class="gallery-controls">
+    <button type="button" class="gallery-arrow gallery-arrow-prev" aria-label="Previous gallery image" data-gallery-prev>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+    <button type="button" class="gallery-arrow gallery-arrow-next" aria-label="Next gallery image" data-gallery-next>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+    </button>
+  </div>
 </section>
 
 <!-- 12b. COMMON ROOF PROBLEMS · paper, 2-up auto-rotating carousel -->
@@ -553,48 +560,57 @@
       <p>If you've spotted any of these, your roof is asking for attention.</p>
     </div>
 
-    <div class="problems-carousel reveal" data-problems-carousel>
+    <div class="problems-marquee reveal" data-problems-marquee>
       <div class="problems-track" data-problems-track>
-
-        <div class="problems-slide">
-          <article class="problem-tile">
-            <h3>Cracked Tiles</h3>
-            <p>Aged tiles split or break. We replace damaged tiles before any coating goes on.</p>
-          </article>
-          <article class="problem-tile">
-            <h3>Rusted Iron and Valleys</h3>
-            <p>Rust on iron roofs and valleys. We treat with rust inhibitor and apply TSR Industrial Aluminium.</p>
-          </article>
-        </div>
-
-        <div class="problems-slide">
-          <article class="problem-tile">
-            <h3>Dislodged Ridge Tiles</h3>
-            <p>Loose ridge caps from years of weather. We rebed and repoint with flexible compound.</p>
-          </article>
-          <article class="problem-tile">
-            <h3>Blocked Gutters</h3>
-            <p>Leaves and debris stop water flow. We clear and reseal as part of the job.</p>
-          </article>
-        </div>
-
-        <div class="problems-slide">
-          <article class="problem-tile">
-            <h3>Damaged Flashing</h3>
-            <p>Cracked flashing around vents and chimneys. Common leak source. We reseal and recoat.</p>
-          </article>
-          <article class="problem-tile">
-            <h3>Moss and Lichen Build-up</h3>
-            <p>South facing tiles grow moss. We soft wash and apply inhibitor before coating.</p>
-          </article>
-        </div>
-
-      </div>
-
-      <div class="problems-dots" role="tablist" aria-label="Common roof problems navigation" data-problems-dots>
-        <button type="button" class="problem-dot is-active" data-problems-jump="0" aria-label="Slide 1"></button>
-        <button type="button" class="problem-dot" data-problems-jump="1" aria-label="Slide 2"></button>
-        <button type="button" class="problem-dot" data-problems-jump="2" aria-label="Slide 3"></button>
+        <article class="problem-tile">
+          <h3>Cracked Tiles</h3>
+          <p>Aged tiles split or break. We replace damaged tiles before any coating goes on.</p>
+        </article>
+        <article class="problem-tile">
+          <h3>Rusted Iron and Valleys</h3>
+          <p>Rust on iron roofs and valleys. We treat with rust inhibitor and apply TSR Industrial Aluminium.</p>
+        </article>
+        <article class="problem-tile">
+          <h3>Dislodged Ridge Tiles</h3>
+          <p>Loose ridge caps from years of weather. We rebed and repoint with flexible compound.</p>
+        </article>
+        <article class="problem-tile">
+          <h3>Blocked Gutters</h3>
+          <p>Leaves and debris stop water flow. We clear and reseal as part of the job.</p>
+        </article>
+        <article class="problem-tile">
+          <h3>Damaged Flashing</h3>
+          <p>Cracked flashing around vents and chimneys. Common leak source. We reseal and recoat.</p>
+        </article>
+        <article class="problem-tile">
+          <h3>Moss and Lichen Build-up</h3>
+          <p>South facing tiles grow moss. We soft wash and apply inhibitor before coating.</p>
+        </article>
+        <!-- DUPLICATE all 6 tiles for seamless loop -->
+        <article class="problem-tile" aria-hidden="true">
+          <h3>Cracked Tiles</h3>
+          <p>Aged tiles split or break. We replace damaged tiles before any coating goes on.</p>
+        </article>
+        <article class="problem-tile" aria-hidden="true">
+          <h3>Rusted Iron and Valleys</h3>
+          <p>Rust on iron roofs and valleys. We treat with rust inhibitor and apply TSR Industrial Aluminium.</p>
+        </article>
+        <article class="problem-tile" aria-hidden="true">
+          <h3>Dislodged Ridge Tiles</h3>
+          <p>Loose ridge caps from years of weather. We rebed and repoint with flexible compound.</p>
+        </article>
+        <article class="problem-tile" aria-hidden="true">
+          <h3>Blocked Gutters</h3>
+          <p>Leaves and debris stop water flow. We clear and reseal as part of the job.</p>
+        </article>
+        <article class="problem-tile" aria-hidden="true">
+          <h3>Damaged Flashing</h3>
+          <p>Cracked flashing around vents and chimneys. Common leak source. We reseal and recoat.</p>
+        </article>
+        <article class="problem-tile" aria-hidden="true">
+          <h3>Moss and Lichen Build-up</h3>
+          <p>South facing tiles grow moss. We soft wash and apply inhibitor before coating.</p>
+        </article>
       </div>
     </div>
 
@@ -709,8 +725,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg>
           </div>
           <p class="review-text">Recently we got our roof painted by Bryce from Coast and Country. We're extremely happy with the end result. It went from ugly and rusty to looking brand new. Bryce was professional, reliable and friendly. We've had so many compliments and people don't believe us when we say it's just painted, not new!</p>
-          <span class="review-divider" aria-hidden="true"></span>
           <span class="review-name">Troy &amp; Jessica</span>
+          <span class="review-divider" aria-hidden="true"></span>
         </article>
         <article class="review-card">
           <div class="review-stars" aria-label="Five stars">
@@ -721,8 +737,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg>
           </div>
           <p class="review-text">We highly recommend Bryce. What more can you ask for? Bryce was friendly and professional, always showed up on time and did an absolutely amazing job on our roof. Thanks Bryce.</p>
-          <span class="review-divider" aria-hidden="true"></span>
           <span class="review-name">Des &amp; Kathy</span>
+          <span class="review-divider" aria-hidden="true"></span>
         </article>
         <article class="review-card">
           <div class="review-stars" aria-label="Five stars">
@@ -733,8 +749,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg>
           </div>
           <p class="review-text">Thanks guys, super quick time frame. Messaged Friday: roof pressure cleaned Friday afternoon, here early today and primed (2 coats), 2 coats AcraTex in Dulux "Ironstone". Makes the place look 10 times better, and from a past house with the same products I know it lasts. 100% recommend Bryce and Coast and Country Roof Coatings.</p>
-          <span class="review-divider" aria-hidden="true"></span>
           <span class="review-name">John</span>
+          <span class="review-divider" aria-hidden="true"></span>
         </article>
         <article class="review-card">
           <div class="review-stars" aria-label="Five stars">
@@ -745,8 +761,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg>
           </div>
           <p class="review-text">Can recommend them 100%. They did our roof very recently and were amazing. Good honest company.</p>
-          <span class="review-divider" aria-hidden="true"></span>
           <span class="review-name">Judy</span>
+          <span class="review-divider" aria-hidden="true"></span>
         </article>
         <article class="review-card">
           <div class="review-stars" aria-label="Five stars">
@@ -757,8 +773,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg>
           </div>
           <p class="review-text">The guys just finished our roof and we are very happy with their work.</p>
-          <span class="review-divider" aria-hidden="true"></span>
           <span class="review-name">Hayley</span>
+          <span class="review-divider" aria-hidden="true"></span>
         </article>
         <article class="review-card">
           <div class="review-stars" aria-label="Five stars">
@@ -769,8 +785,8 @@
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg>
           </div>
           <p class="review-text">They do a good job. My roof is beautiful now, no problems with it now thanks to these men. Great job.</p>
-          <span class="review-divider" aria-hidden="true"></span>
           <span class="review-name">Colleen</span>
+          <span class="review-divider" aria-hidden="true"></span>
         </article>
       </div>
     </div>
@@ -904,11 +920,6 @@
           <img src="images/logo.png" alt="Coast and Country Roof Coatings" class="brand-logo" width="1835" height="295">
         </a>
         <p>Roof restoration crew led by Bryce, with over thirty years in the trade. Working across New South Wales. Dulux AcraTex Accredited. Ten year written guarantee.</p>
-        <div class="footer-phone-block">
-          <span class="label">Call Bryce direct</span>
-          <a href="tel:0487509027" class="phone">0487 509 027</a>
-          <a href="mailto:bstewart2009@live.com.au" class="email">bstewart2009@live.com.au</a>
-        </div>
       </div>
       <div class="footer-col">
         <h4>Services</h4>
@@ -950,20 +961,10 @@
       </div>
     </div>
 
-    <div class="footer-cta">
-      <p class="footer-cta-lead">Got a roof that needs a look?</p>
-      <a href="tel:0487509027" class="phone-pill phone-pill-lg" data-phone-link>
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 00-1.02.24l-2.2 2.2a15.1 15.1 0 01-6.59-6.59l2.2-2.2a1 1 0 00.24-1.02A11.36 11.36 0 018.5 4a1 1 0 00-1-1H4a1 1 0 00-1 1c0 9.39 7.61 17 17 17a1 1 0 001-1v-3.5a1 1 0 00-1-1z"/></svg>
-        <span class="phone-pill-label">Call Bryce &middot; 0487 509 027</span>
-      </a>
-    </div>
-
     <div class="footer-credentials">
-      <span>NSW Fair Trading Licensed</span><span class="sep">&middot;</span>
-      <span>Fully Insured</span><span class="sep">&middot;</span>
-      <span>Dulux Accredited Applicator</span><span class="sep">&middot;</span>
-      <span>NSW Lic 243692C</span><span class="sep">&middot;</span>
-      <span>QBCC Lic 1230766</span><span class="sep">&middot;</span>
+      <span>NSW Fair Trading Licensed</span>
+      <span>NSW LIC 243692C</span>
+      <span>QBCC LIC 1230766</span>
       <span>$20M Public Liability</span>
     </div>
   </div>

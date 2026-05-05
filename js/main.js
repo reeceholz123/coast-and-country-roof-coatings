@@ -193,24 +193,16 @@
   }
 
   /* ----------------------------------------------------------
-     12. Gallery constant drift + dot navigation (RAF loop)
+     12. Gallery constant drift + prev/next arrow navigation
   ---------------------------------------------------------- */
   const gallery = document.querySelector('[data-gallery]');
   const galleryTrack = document.querySelector('[data-gallery-track]');
-  const galleryDotsHost = document.querySelector('[data-gallery-dots]');
+  const galleryPrev = document.querySelector('[data-gallery-prev]');
+  const galleryNext = document.querySelector('[data-gallery-next]');
   if (gallery && galleryTrack) {
     const tiles = Array.from(galleryTrack.children);
     if (tiles.length) {
       tiles.forEach((t) => galleryTrack.appendChild(t.cloneNode(true)));
-      if (galleryDotsHost) {
-        tiles.forEach((_, i) => {
-          const b = document.createElement('button');
-          b.className = 'gallery-dot' + (i === 0 ? ' is-active' : '');
-          b.setAttribute('aria-label', 'Go to gallery item ' + (i + 1));
-          b.addEventListener('click', () => jumpTo(i));
-          galleryDotsHost.appendChild(b);
-        });
-      }
       let pos = 0;
       let paused = false;
       const speed = 0.35;
@@ -220,31 +212,36 @@
           const half = galleryTrack.scrollWidth / 2;
           if (-pos >= half) pos = 0;
           galleryTrack.style.transform = `translateX(${pos}px)`;
-          updateActiveDot();
         }
         requestAnimationFrame(step);
-      }
-      function updateActiveDot() {
-        if (!galleryDotsHost) return;
-        const tile = tiles[0];
-        if (!tile) return;
-        const tw = tile.getBoundingClientRect().width + 14;
-        const idx = Math.round(Math.abs(pos) / tw) % tiles.length;
-        galleryDotsHost.querySelectorAll('.gallery-dot').forEach((d, i) => {
-          d.classList.toggle('is-active', i === idx);
-        });
-      }
-      function jumpTo(idx) {
-        const tile = tiles[0];
-        if (!tile) return;
-        const tw = tile.getBoundingClientRect().width + 14;
-        pos = -tw * idx;
-        galleryTrack.style.transform = `translateX(${pos}px)`;
-        updateActiveDot();
       }
       gallery.addEventListener('mouseenter', () => { paused = true; });
       gallery.addEventListener('mouseleave', () => { paused = false; });
       requestAnimationFrame(step);
+
+      // Arrow controls — pause drift, shift one tile width, idle-resume after 4s
+      let idleTimer = null;
+      function bumpIdle() {
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => { paused = false; }, 4000);
+      }
+      function tileStep() {
+        const tile = tiles[0];
+        if (!tile) return 280;
+        return tile.getBoundingClientRect().width + 14;
+      }
+      function shift(direction) {
+        paused = true;
+        const half = galleryTrack.scrollWidth / 2;
+        pos += direction * tileStep();
+        // Wrap around to keep the loop seamless
+        if (pos > 0) pos -= half;
+        if (-pos >= half) pos += half;
+        galleryTrack.style.transform = `translateX(${pos}px)`;
+        bumpIdle();
+      }
+      if (galleryPrev) galleryPrev.addEventListener('click', () => shift(1));
+      if (galleryNext) galleryNext.addEventListener('click', () => shift(-1));
     }
   }
 
@@ -325,50 +322,9 @@
   }
 
   /* ----------------------------------------------------------
-     14b. Common Roof Problems carousel (2-up, 3-slide auto-rotate)
+     14b. (Common Roof Problems is now a CSS-only marquee.
+          See .problems-marquee + @keyframes problems-drift in main.css.)
   ---------------------------------------------------------- */
-  (function initProblemsCarousel() {
-    const carousel = document.querySelector('[data-problems-carousel]');
-    if (!carousel) return;
-
-    const track = carousel.querySelector('[data-problems-track]');
-    const dots = Array.from(carousel.querySelectorAll('[data-problems-jump]'));
-    if (!track || !dots.length) return;
-
-    const slideCount = track.children.length;
-    let current = 0;
-    let timer = null;
-    const INTERVAL = 5000;
-
-    function go(i) {
-      current = (i + slideCount) % slideCount;
-      track.style.transform = `translateX(-${current * 100}%)`;
-      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === current));
-    }
-
-    function start() {
-      stop();
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      timer = setInterval(() => go(current + 1), INTERVAL);
-    }
-
-    function stop() {
-      if (timer) { clearInterval(timer); timer = null; }
-    }
-
-    dots.forEach((d) => {
-      d.addEventListener('click', () => {
-        go(parseInt(d.dataset.problemsJump, 10));
-        start();
-      });
-    });
-
-    carousel.addEventListener('mouseenter', stop);
-    carousel.addEventListener('mouseleave', start);
-    carousel.addEventListener('touchstart', stop, { passive: true });
-
-    start();
-  })();
 
   /* ----------------------------------------------------------
      15. Colour guide expand/collapse (height + opacity)
