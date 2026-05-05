@@ -360,18 +360,13 @@ section { padding: var(--section-py) 0; }
 }
 .mobile-cta { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
 
-/* --- HERO ---------------------------------------------------------- */
+/* ===== HERO BASE ===== */
 .hero {
   position: relative;
   color: var(--paper);
   isolation: isolate;
   overflow: hidden;
   background: var(--ink);
-  min-height: 720px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 80px 24px;
 }
 
 .hero-bg {
@@ -384,36 +379,17 @@ section { padding: var(--section-py) 0; }
   z-index: 0;
 }
 
-/* Multi-stop gradient — darker top and bottom for text contrast,
-   lighter middle so the truck stays visible */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    180deg,
-    rgba(0,0,0,0.65) 0%,
-    rgba(0,0,0,0.50) 20%,
-    rgba(0,0,0,0.30) 50%,
-    rgba(0,0,0,0.55) 80%,
-    rgba(0,0,0,0.75) 100%
-  );
-}
-
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 880px;
   width: 100%;
+  max-width: 880px;
   margin: 0 auto;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  gap: 22px;
 }
 
 .hero-top,
@@ -434,7 +410,7 @@ section { padding: var(--section-py) 0; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
   margin: 0;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .hero-headline {
@@ -446,7 +422,7 @@ section { padding: var(--section-py) 0; }
   letter-spacing: 0.01em;
   text-transform: uppercase;
   margin: 0;
-  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.65);
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.75);
 }
 
 .hero-sub {
@@ -455,7 +431,7 @@ section { padding: var(--section-py) 0; }
   line-height: 1.55;
   max-width: 580px;
   margin: 0 auto;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .hero-sub-mobile  { display: none; }
@@ -479,8 +455,7 @@ section { padding: var(--section-py) 0; }
   margin-top: 14px;
 }
 
-.hero-trust span,
-.hero-trust-item {
+.hero-trust span {
   font-family: 'Archivo Narrow', sans-serif;
   font-weight: 600;
   font-size: 0.72rem;
@@ -488,14 +463,13 @@ section { padding: var(--section-py) 0; }
   text-transform: uppercase;
   color: var(--accent);
   white-space: nowrap;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
 }
-
 .hero-trust .sep {
   color: rgba(245, 242, 237, 0.5);
 }
 
-/* Scroll-down chevron retained for desktop affordance */
+/* Scroll-down chevron — desktop scroll affordance, hidden on mobile below */
 .hero-chevron {
   position: absolute;
   bottom: 18px;
@@ -515,34 +489,73 @@ section { padding: var(--section-py) 0; }
 }
 @media (prefers-reduced-motion: reduce) { .hero-chevron { animation: none; } }
 
-/* MOBILE OVERRIDES */
-@media (max-width: 720px) {
-
+/* ===== DESKTOP HERO (≥721px) — text CENTERED on image ===== */
+@media (min-width: 721px) {
   .hero {
-    min-height: 560px;
-    padding: 60px 20px 80px;
-    align-items: flex-start;
+    min-height: 720px;
+    display: flex;
+    align-items: center;       /* CENTERED vertically */
+    justify-content: center;   /* CENTERED horizontally */
+    padding: 80px 24px;
   }
 
-  .hero-bg {
-    object-position: center 60%;
-  }
-
-  /* Stronger top gradient on mobile so eyebrow + headline read
-     clearly over the bright sky in the upper portion of the photo */
+  /* Subtle gradient — light dim across whole image, slightly
+     stronger top/bottom for the trust strip and eyebrow */
   .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(0,0,0,0.50) 0%,
+      rgba(0,0,0,0.30) 25%,
+      rgba(0,0,0,0.25) 50%,
+      rgba(0,0,0,0.40) 75%,
+      rgba(0,0,0,0.55) 100%
+    );
+  }
+}
+
+/* ===== MOBILE HERO (≤720px) — text in UPPER PORTION ===== */
+@media (max-width: 720px) {
+  .hero {
+    min-height: 640px;
+    display: flex;
+    align-items: flex-start;   /* TOP-anchored, not centered */
+    justify-content: center;
+    padding: 56px 20px 40px;   /* room above text */
+  }
+
+  /* Show the lower portion of the image (the truck/house),
+     sky stays at top behind the text */
+  .hero-bg {
+    object-position: center 70%;
+  }
+
+  /* Strong top-half gradient so the eyebrow + headline + sub
+     overlay the bright sky cleanly. Lower half stays clear so
+     the truck is visible. */
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
     background: linear-gradient(
       180deg,
       rgba(0,0,0,0.80) 0%,
-      rgba(0,0,0,0.60) 30%,
-      rgba(0,0,0,0.30) 60%,
-      rgba(0,0,0,0.55) 100%
+      rgba(0,0,0,0.65) 25%,
+      rgba(0,0,0,0.35) 45%,
+      rgba(0,0,0,0.10) 65%,
+      rgba(0,0,0,0.20) 100%
     );
   }
 
   .hero-content {
-    gap: 18px;
-    padding-top: 24px;
+    gap: 16px;
+    padding-top: 12px;
   }
 
   .hero-eyebrow {
@@ -563,13 +576,12 @@ section { padding: var(--section-py) 0; }
   }
 
   /* Hide CTAs on mobile — sticky bottom bar handles call/quote */
-  .hero-ctas { display: none; }
+  .hero-ctas { display: none !important; }
 
   /* Hide trust strip on mobile to keep hero clean */
-  .hero-trust { display: none; }
+  .hero-trust { display: none !important; }
 
-  /* Chevron hidden on mobile — viewport is short and the
-     scroll affordance isn't needed here */
+  /* Chevron hidden on mobile — viewport is short, scroll affordance not needed */
   .hero-chevron { display: none; }
 }
 
@@ -730,59 +742,108 @@ section { padding: var(--section-py) 0; }
   margin: 0 auto 20px;
 }
 
-/* --- Common Roof Problems (3-col grid, 6 tiles) ------------------- */
-.problems-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+/* --- Common Roof Problems (2-up auto-rotating carousel) ---------- */
+.problems-section {
+  padding: 56px 0;
 }
-@media (max-width: 960px) { .problems-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 480px) {
-  .problems-grid { grid-template-columns: 1fr; gap: 16px; }
-  .problem-card { align-items: center; text-align: center; }
+.problems-carousel {
+  position: relative;
+  overflow: hidden;
+  margin: 32px 0 24px;
 }
-
-.problem-card {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 28px 22px;
+.problems-track {
   display: flex;
-  flex-direction: column;
-  text-align: left;
-  transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
+  transition: transform 600ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  will-change: transform;
 }
-.problem-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--accent);
-  box-shadow: var(--shadow-card-hover);
+.problems-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 0 2px;
 }
-.problem-card h3 {
-  font-family: var(--font-display);
-  font-weight: 700;
+.problem-tile {
+  background: var(--white);
+  border-top: 3px solid var(--accent);
+  padding: 28px 24px;
+  border-radius: var(--radius);
+  box-shadow: 0 2px 12px rgba(14, 42, 79, 0.06);
+  transition: transform 250ms ease, box-shadow 250ms ease;
+}
+.problem-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(14, 42, 79, 0.12);
+}
+.problem-tile h3 {
+  color: var(--brand);
+  font-family: 'Big Shoulders Display', sans-serif;
+  font-weight: 800;
   font-size: 1.15rem;
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
-  color: var(--ink);
   line-height: 1.1;
   margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
 }
-.problem-card p {
-  font-family: var(--font-body);
-  font-size: 0.92rem;
-  color: var(--concrete);
-  line-height: 1.5;
+.problem-tile p {
   margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.problems-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+.problem-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--line);
+  border: 0;
+  cursor: pointer;
+  padding: 0;
+  transition: background 200ms ease, transform 200ms ease;
+}
+.problem-dot:hover { background: var(--concrete); }
+.problem-dot.is-active {
+  background: var(--accent);
+  transform: scale(1.4);
 }
 
 .problems-cta {
   text-align: center;
-  margin-top: 36px;
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
 }
 .problems-cta-lead {
-  font-size: 1rem;
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
   color: var(--ink);
-  margin-bottom: 14px;
+  margin: 0 0 16px;
+}
+
+@media (max-width: 720px) {
+  .problems-section { padding: 40px 0; }
+  .problems-slide {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .problem-tile {
+    padding: 20px 14px;
+  }
+  .problem-tile h3 { font-size: 0.92rem; }
+  .problem-tile p { font-size: 0.78rem; line-height: 1.4; }
+  .problems-cta-lead { font-size: 0.8rem; }
 }
 
 /* --- Trust section (Accredited By) -------------------------------- */
@@ -806,11 +867,17 @@ section { padding: var(--section-py) 0; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 10px;
+  min-width: 0;
   transition: transform var(--t) var(--ease);
 }
 .trust-badge:hover { transform: translateY(-2px); }
 .trust-badge-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.8rem;
   font-family: 'Big Shoulders Display', sans-serif;
   font-weight: 800;
   font-size: 1.6rem;
@@ -818,15 +885,21 @@ section { padding: var(--section-py) 0; }
   color: var(--brand);
   text-transform: uppercase;
   line-height: 1;
+  white-space: nowrap;
 }
 .trust-badge-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+  min-height: 2.2em;
   font-family: 'Archivo Narrow', sans-serif;
   font-weight: 600;
   font-size: 0.72rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--concrete);
-  text-align: center;
 }
 .trust-badge-divider {
   width: 1px;
@@ -845,8 +918,15 @@ section { padding: var(--section-py) 0; }
     flex: 1 1 33%;
     min-width: 0;
   }
-  .trust-badge-mark { font-size: 0.85rem; }
-  .trust-badge-label { font-size: 0.55rem; letter-spacing: 0.1em; }
+  .trust-badge-mark {
+    height: 1.1rem;
+    font-size: 0.78rem;
+  }
+  .trust-badge-label {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    min-height: 2em;
+  }
   .trust-badge-divider { height: 32px; }
 }
 
@@ -1677,6 +1757,28 @@ details.areas-col ul li::before {
 .site-footer .footer-col ul li a { color: var(--ink); transition: color var(--t) var(--ease); }
 .site-footer .footer-col ul li a:hover { color: var(--accent); }
 
+/* Center the footer brand column on all sizes */
+.site-footer .footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.site-footer .footer-brand .brand-logo,
+.site-footer .footer-logo,
+.site-footer .brand-logo {
+  margin: 0 auto;
+}
+.site-footer .footer-brand p {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.site-footer .footer-phone-block {
+  align-items: center;
+  text-align: center;
+}
+
 .footer-brand .brand-text {
   display: inline-flex;
   flex-direction: column;
@@ -1769,15 +1871,66 @@ details.areas-col ul li::before {
 }
 .site-footer .footer-credentials .sep { color: var(--accent); }
 
-.site-footer .footer-bottom {
+/* Footer phone CTA section — sits between the 4-col grid and the credentials */
+.footer-cta {
+  margin-top: 40px;
+  padding-top: 32px;
   border-top: 1px solid var(--line);
-  padding-top: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.footer-cta-lead {
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: 0;
+}
+.phone-pill-lg {
+  padding: 16px 28px;
+  font-size: 1rem;
+}
+
+/* Navy band at the very bottom — sits OUTSIDE the main .wrap so it spans full width */
+.footer-bottom-band {
+  background: var(--brand);
+  color: var(--paper);
+  padding: 18px 0;
+  margin-top: 32px;
+}
+.footer-bottom-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
-  gap: 12px;
-  font-size: 0.84rem;
-  color: var(--concrete);
+  font-family: 'Archivo Narrow', sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: rgba(245, 242, 237, 0.75);
+}
+.footer-bottom-band .footer-copy,
+.footer-bottom-band .footer-abn {
+  margin: 0;
+  color: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+@media (max-width: 720px) {
+  .footer-cta { margin-top: 28px; padding-top: 24px; }
+  .footer-bottom-band { padding: 14px 0; margin-top: 20px; }
+  .footer-bottom-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    font-size: 0.72rem;
+  }
 }
 
 /* --- Sticky mobile CTA -------------------------------------------- */
@@ -2165,27 +2318,8 @@ details.areas-col ul li::before {
     margin-right: auto;
   }
 
-  /* --- 7. Common Roof Problems (2-up grid, centred, icon removed) - */
-  .problems-grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
-  }
-  .problem-card {
-    padding: 20px 16px;
-    text-align: center;
-    align-items: center;
-  }
-  .problem-card h3 {
-    font-size: 0.95rem;
-    text-align: center;
-    margin: 0 0 8px;
-  }
-  .problem-card p {
-    font-size: 0.82rem;
-    line-height: 1.4;
-    text-align: center;
-    margin: 0;
-  }
+  /* --- 7. (Common Roof Problems mobile rules now live with the
+            base problems-section block — see top of file.) ------- */
 
   /* --- 8. (Trust Badge Row mobile rules now live with the base
             trust-section block — see top of file.) --------------- */
@@ -2264,12 +2398,8 @@ details.areas-col ul li::before {
     font-size: 0.7rem;
     padding-top: 16px;
   }
-  .footer-bottom {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 8px;
-  }
+  /* (.footer-bottom replaced by .footer-bottom-band — mobile rules
+      now live with the base navy-band block above.) */
   .footer-social { justify-content: center; }
 
   /* --- 12. Areas section (h2 wraps cleanly, summaries left) ------ */

@@ -325,6 +325,52 @@
   }
 
   /* ----------------------------------------------------------
+     14b. Common Roof Problems carousel (2-up, 3-slide auto-rotate)
+  ---------------------------------------------------------- */
+  (function initProblemsCarousel() {
+    const carousel = document.querySelector('[data-problems-carousel]');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('[data-problems-track]');
+    const dots = Array.from(carousel.querySelectorAll('[data-problems-jump]'));
+    if (!track || !dots.length) return;
+
+    const slideCount = track.children.length;
+    let current = 0;
+    let timer = null;
+    const INTERVAL = 5000;
+
+    function go(i) {
+      current = (i + slideCount) % slideCount;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((d, idx) => d.classList.toggle('is-active', idx === current));
+    }
+
+    function start() {
+      stop();
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = setInterval(() => go(current + 1), INTERVAL);
+    }
+
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    dots.forEach((d) => {
+      d.addEventListener('click', () => {
+        go(parseInt(d.dataset.problemsJump, 10));
+        start();
+      });
+    });
+
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+    carousel.addEventListener('touchstart', stop, { passive: true });
+
+    start();
+  })();
+
+  /* ----------------------------------------------------------
      15. Colour guide expand/collapse (height + opacity)
   ---------------------------------------------------------- */
   const cToggle = document.querySelector('[data-colour-toggle]');

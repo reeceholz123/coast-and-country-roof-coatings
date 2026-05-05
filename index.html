@@ -544,46 +544,65 @@
   <div class="gallery-dots" role="tablist" aria-label="Gallery navigation" data-gallery-dots></div>
 </section>
 
-<!-- 12b. COMMON ROOF PROBLEMS · paper -->
-<section id="problems" class="section-paper">
+<!-- 12b. COMMON ROOF PROBLEMS · paper, 2-up auto-rotating carousel -->
+<section id="problems" class="section-paper problems-section">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">What We Fix</span>
-      <h2>Common roof problems.</h2>
+      <span class="eyebrow">Common Roof Problems</span>
+      <h2>What we fix.</h2>
       <p>If you've spotted any of these, your roof is asking for attention.</p>
     </div>
-    <div class="problems-grid">
-      <article class="problem-card reveal">
-        <h3>Cracked Tiles</h3>
-        <p>Aged tiles split or break. We replace damaged tiles before any coating goes on.</p>
-      </article>
-      <article class="problem-card reveal">
-        <h3>Rusted Iron and Valleys</h3>
-        <p>Rust on iron roofs and valleys. We treat with rust inhibitor and apply TSR Industrial Aluminium.</p>
-      </article>
-      <article class="problem-card reveal">
-        <h3>Dislodged Ridge Tiles</h3>
-        <p>Loose ridge caps from years of weather. We rebed and repoint with flexible compound.</p>
-      </article>
-      <article class="problem-card reveal">
-        <h3>Blocked Gutters</h3>
-        <p>Leaves and debris stop water flow. We clear and reseal as part of the job.</p>
-      </article>
-      <article class="problem-card reveal">
-        <h3>Damaged Flashing</h3>
-        <p>Cracked flashing around vents and chimneys. Common leak source. We reseal and recoat.</p>
-      </article>
-      <article class="problem-card reveal">
-        <h3>Moss and Lichen Build-Up</h3>
-        <p>South facing tiles grow moss. We soft wash and apply inhibitor before coating.</p>
-      </article>
+
+    <div class="problems-carousel reveal" data-problems-carousel>
+      <div class="problems-track" data-problems-track>
+
+        <div class="problems-slide">
+          <article class="problem-tile">
+            <h3>Cracked Tiles</h3>
+            <p>Aged tiles split or break. We replace damaged tiles before any coating goes on.</p>
+          </article>
+          <article class="problem-tile">
+            <h3>Rusted Iron and Valleys</h3>
+            <p>Rust on iron roofs and valleys. We treat with rust inhibitor and apply TSR Industrial Aluminium.</p>
+          </article>
+        </div>
+
+        <div class="problems-slide">
+          <article class="problem-tile">
+            <h3>Dislodged Ridge Tiles</h3>
+            <p>Loose ridge caps from years of weather. We rebed and repoint with flexible compound.</p>
+          </article>
+          <article class="problem-tile">
+            <h3>Blocked Gutters</h3>
+            <p>Leaves and debris stop water flow. We clear and reseal as part of the job.</p>
+          </article>
+        </div>
+
+        <div class="problems-slide">
+          <article class="problem-tile">
+            <h3>Damaged Flashing</h3>
+            <p>Cracked flashing around vents and chimneys. Common leak source. We reseal and recoat.</p>
+          </article>
+          <article class="problem-tile">
+            <h3>Moss and Lichen Build-up</h3>
+            <p>South facing tiles grow moss. We soft wash and apply inhibitor before coating.</p>
+          </article>
+        </div>
+
+      </div>
+
+      <div class="problems-dots" role="tablist" aria-label="Common roof problems navigation" data-problems-dots>
+        <button type="button" class="problem-dot is-active" data-problems-jump="0" aria-label="Slide 1"></button>
+        <button type="button" class="problem-dot" data-problems-jump="1" aria-label="Slide 2"></button>
+        <button type="button" class="problem-dot" data-problems-jump="2" aria-label="Slide 3"></button>
+      </div>
     </div>
+
     <div class="problems-cta reveal">
       <p class="problems-cta-lead">Spot any of these on your roof?</p>
-      <a href="tel:0487509027" class="phone-pill">
+      <a href="tel:0487509027" class="phone-pill" data-phone-link>
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 00-1.02.24l-2.2 2.2a15.1 15.1 0 01-6.59-6.59l2.2-2.2a1 1 0 00.24-1.02A11.36 11.36 0 018.5 4a1 1 0 00-1-1H4a1 1 0 00-1 1c0 9.39 7.61 17 17 17a1 1 0 001-1v-3.5a1 1 0 00-1-1z"/></svg>
-        <span class="phone-pill-label phone-pill-desktop">Get a Free Inspection &middot; 0487 509 027</span>
-        <span class="phone-pill-label phone-pill-mobile">Call Bryce &middot; 0487 509 027</span>
+        <span class="phone-pill-label">Call Bryce &middot; 0487 509 027</span>
       </a>
     </div>
   </div>
@@ -931,6 +950,14 @@
       </div>
     </div>
 
+    <div class="footer-cta">
+      <p class="footer-cta-lead">Got a roof that needs a look?</p>
+      <a href="tel:0487509027" class="phone-pill phone-pill-lg" data-phone-link>
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1 1 0 00-1.02.24l-2.2 2.2a15.1 15.1 0 01-6.59-6.59l2.2-2.2a1 1 0 00.24-1.02A11.36 11.36 0 018.5 4a1 1 0 00-1-1H4a1 1 0 00-1 1c0 9.39 7.61 17 17 17a1 1 0 001-1v-3.5a1 1 0 00-1-1z"/></svg>
+        <span class="phone-pill-label">Call Bryce &middot; 0487 509 027</span>
+      </a>
+    </div>
+
     <div class="footer-credentials">
       <span>NSW Fair Trading Licensed</span><span class="sep">&middot;</span>
       <span>Fully Insured</span><span class="sep">&middot;</span>
@@ -939,11 +966,15 @@
       <span>QBCC Lic 1230766</span><span class="sep">&middot;</span>
       <span>$20M Public Liability</span>
     </div>
+  </div>
 
-    <div class="footer-bottom">
-      <span>&copy; <span id="current-year">2026</span> Coast and Country Roof Coatings &middot; New South Wales</span>
-      <!-- PLACEHOLDER · ABN to be supplied -->
-      <span>ABN XX XXX XXX XXX</span>
+  <div class="footer-bottom-band">
+    <div class="wrap">
+      <div class="footer-bottom-row">
+        <span class="footer-copy">&copy; <span id="current-year">2026</span> Coast and Country Roof Coatings &middot; New South Wales</span>
+        <!-- PLACEHOLDER · ABN to be supplied -->
+        <span class="footer-abn">ABN XX XXX XXX XXX</span>
+      </div>
     </div>
   </div>
 </footer>
