@@ -587,8 +587,6 @@ section { padding: var(--section-py) 0; }
   /* Image renders natively — no crop, no scale. The pre-cropped
      hero_image_mobile.PNG provides its own framing. */
   .hero-bg {
-    position: static;
-    inset: auto;
     width: 100%;
     height: auto;
     display: block;
