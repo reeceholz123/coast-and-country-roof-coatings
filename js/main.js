@@ -559,4 +559,109 @@
     });
   }
 
+  /* ----------------------------------------------------------
+     25. Headline word-stagger reveal on scroll
+  ---------------------------------------------------------- */
+  (function initHeadlineReveal() {
+    const headlines = document.querySelectorAll('.section-head h2');
+    if (!headlines.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    headlines.forEach(h => {
+      const text = h.textContent.trim();
+      const words = text.split(/\s+/);
+      h.innerHTML = words.map(w => `<span class="word-reveal">${w}</span>`).join(' ');
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const ws = entry.target.querySelectorAll('.word-reveal');
+          ws.forEach((w, i) => setTimeout(() => w.classList.add('is-in'), i * 80));
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+
+    headlines.forEach(h => io.observe(h));
+  })();
+
+  /* ----------------------------------------------------------
+     26. Image scale-in on viewport entry
+  ---------------------------------------------------------- */
+  (function initImageReveal() {
+    const targets = document.querySelectorAll(
+      '.gallery-tile img, .ba-slider .pane img, .process-step .process-step-img img, .gallery-track img'
+    );
+    if (!targets.length || !('IntersectionObserver' in window)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    targets.forEach(img => img.classList.add('image-reveal'));
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    targets.forEach(img => io.observe(img));
+  })();
+
+  /* ----------------------------------------------------------
+     27. CTA magnetic hover (desktop only)
+  ---------------------------------------------------------- */
+  (function initCTAMagnet() {
+    if (window.matchMedia('(max-width: 720px)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const ctas = document.querySelectorAll('.btn-primary, .phone-pill');
+    if (!ctas.length) return;
+
+    ctas.forEach(btn => {
+      let raf = null;
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) * 0.18;
+        const dy = (e.clientY - cy) * 0.18;
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          btn.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+      });
+      btn.addEventListener('mouseleave', () => {
+        if (raf) cancelAnimationFrame(raf);
+        btn.style.transform = '';
+      });
+    });
+  })();
+
+  /* ----------------------------------------------------------
+     28. Sticky credential micro-bar (desktop only)
+  ---------------------------------------------------------- */
+  (function initStickyCreds() {
+    const bar = document.getElementById('sticky-creds');
+    const hero = document.querySelector('.hero');
+    if (!bar || !hero) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          bar.classList.add('is-visible');
+          bar.setAttribute('aria-hidden', 'false');
+        } else {
+          bar.classList.remove('is-visible');
+          bar.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }, { threshold: 0.05 });
+
+    io.observe(hero);
+  })();
+
 })();
