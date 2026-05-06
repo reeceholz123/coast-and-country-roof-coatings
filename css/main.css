@@ -583,12 +583,13 @@ section { padding: var(--section-py) 0; }
 /* ===== MOBILE HERO (≤720px) — text in UPPER PORTION ===== */
 @media (max-width: 720px) {
   .hero {
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: block !important;
+    background: transparent !important;
     position: relative;
-    display: block;
-    height: auto;
-    min-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
     overflow: hidden;
   }
 
@@ -597,13 +598,16 @@ section { padding: var(--section-py) 0; }
 
   /* Mobile image at NATURAL dimensions — no cropping, ever */
   .hero-bg-mobile {
-    display: block;
-    position: relative;
-    width: 100%;
-    height: auto;
-    z-index: 0;
-    margin: 0;
-    padding: 0;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    vertical-align: top !important;
+    position: relative !important;
+    object-fit: unset !important;
+    object-position: unset !important;
+    aspect-ratio: unset !important;
   }
 
   /* Strong top-half gradient so the eyebrow + headline + sub
