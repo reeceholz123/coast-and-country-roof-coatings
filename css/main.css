@@ -369,7 +369,8 @@ section { padding: var(--section-py) 0; }
   background: var(--ink);
 }
 
-.hero-bg {
+/* DESKTOP HERO IMAGE — full-bleed cover */
+.hero-bg-desktop {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -377,6 +378,12 @@ section { padding: var(--section-py) 0; }
   object-fit: cover;
   object-position: center center;
   z-index: 0;
+  display: block;
+}
+
+/* MOBILE HERO IMAGE — hidden by default, swapped in below 720px */
+.hero-bg-mobile {
+  display: none;
 }
 
 .hero-content {
@@ -576,20 +583,27 @@ section { padding: var(--section-py) 0; }
 /* ===== MOBILE HERO (≤720px) — text in UPPER PORTION ===== */
 @media (max-width: 720px) {
   .hero {
-    min-height: 0;
+    position: relative;
+    display: block;
     height: auto;
-    display: flex;
-    align-items: flex-start;   /* TOP-anchored, not centered */
-    justify-content: center;
-    padding: 56px 20px 0;      /* image sets bottom edge */
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
   }
 
-  /* Image renders natively — no crop, no scale. The pre-cropped
-     hero_image_mobile.PNG provides its own framing. */
-  .hero-bg {
+  /* Hide desktop image on mobile */
+  .hero-bg-desktop { display: none; }
+
+  /* Mobile image at NATURAL dimensions — no cropping, ever */
+  .hero-bg-mobile {
+    display: block;
+    position: relative;
     width: 100%;
     height: auto;
-    display: block;
+    z-index: 0;
+    margin: 0;
+    padding: 0;
   }
 
   /* Strong top-half gradient so the eyebrow + headline + sub
@@ -612,8 +626,14 @@ section { padding: var(--section-py) 0; }
   }
 
   .hero-content {
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 0 20px;
+    margin: 0 auto;
     gap: 16px;
-    padding-top: 12px;
     max-width: 340px;
   }
 
