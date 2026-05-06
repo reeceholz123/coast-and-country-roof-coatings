@@ -1969,11 +1969,19 @@ details.areas-col ul li::before {
   color: rgba(245, 242, 237, 0.75);
 }
 .footer-bottom-band .footer-copy,
-.footer-bottom-band .footer-abn {
+.footer-bottom-band .footer-email-link {
   margin: 0;
   color: inherit;
   font-size: inherit;
   letter-spacing: inherit;
+}
+.footer-bottom-band .footer-email-link {
+  text-decoration: none;
+  transition: color 200ms ease, opacity 200ms ease;
+}
+.footer-bottom-band .footer-email-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }
 
 @media (max-width: 720px) {
