@@ -237,7 +237,7 @@ section { padding: var(--section-py) 0; }
 }
 .footer-brand .brand-logo,
 .site-footer .brand-logo { height: 64px; }
-.mobile-sheet-head .brand-logo { height: 40px; }
+.mobile-sheet-head .brand-logo { height: 38px; width: auto; display: block; }
 
 .brand-text {
   font-family: var(--font-display);
@@ -331,15 +331,33 @@ section { padding: var(--section-py) 0; }
 }
 .mobile-sheet.is-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
 .mobile-sheet-head {
+  background: var(--paper);
+  padding: 16px 20px;
+  margin: -24px -24px 24px;     /* escape parent padding so the paper fills edge-to-edge */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
+  border-bottom: 1px solid var(--line);
+}
+.mobile-sheet-head .brand {
+  display: inline-flex;
+  align-items: center;
 }
 .mobile-sheet-head .close {
-  width: 40px; height: 40px;
-  font-size: 1.25rem;
-  color: var(--paper);
+  background: transparent;
+  border: none;
+  color: var(--ink);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 8px;
+  margin: 0;
+  width: auto;
+  height: auto;
+  transition: opacity 0.2s ease;
+}
+.mobile-sheet-head .close:hover {
+  opacity: 0.6;
 }
 .mobile-sheet ul {
   display: flex;
